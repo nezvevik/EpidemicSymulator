@@ -1,11 +1,9 @@
-package cz.cvut.fel.pjv;
+package cz.cvut.fel.pjv.handlers;
 
 import cz.cvut.fel.pjv.models.person.BasePerson;
 
-public class SimulationCanvasHandler {
-    public void draw(SimulationModel simulationModel) {
-
-    }
+public class SimulationCanvasHandler implements Handler{
+    public void draw() {}
     private void drawPerson(BasePerson basePerson) {
 
     }
