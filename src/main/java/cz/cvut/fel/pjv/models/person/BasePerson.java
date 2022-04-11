@@ -17,4 +17,16 @@ public abstract class BasePerson {
         this.direction = direction;
         this.infectionPhase = infectionPhase;
     }
+
+    public Point2D getPosition() {
+        return position;
+    }
+
+    public Point2D getDirection() {
+        return direction;
+    }
+
+    public InfectionPhase getInfectionPhase() {
+        return infectionPhase;
+    }
 }

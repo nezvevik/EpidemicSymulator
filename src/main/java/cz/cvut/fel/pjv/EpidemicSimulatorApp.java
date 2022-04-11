@@ -1,5 +1,7 @@
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.handlers.SimulationCanvasHandler;
+import cz.cvut.fel.pjv.models.SimulationSettings;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -10,10 +12,12 @@ public class EpidemicSimulatorApp extends Application {
 
     @Override
     public void start(Stage stage) {
-        var label = new Label("Hello, JavaFX");
-        var scene = new Scene(new StackPane(label), 640, 480);
-        stage.setScene(scene);
-        stage.show();
+        //settings
+        SimulationSettings simulationSettings = new SimulationSettings();
+
+        //starting simulation
+        SimulationModel simulationModel = new SimulationModel(simulationSettings);
+        simulationModel.runSimulation();
     }
 
     public static void main(String[] args) {
