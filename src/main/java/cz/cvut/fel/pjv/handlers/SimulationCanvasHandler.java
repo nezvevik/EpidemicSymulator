@@ -1,54 +1,55 @@
 package cz.cvut.fel.pjv.handlers;
 
 import cz.cvut.fel.pjv.SimulationModel;
-import cz.cvut.fel.pjv.models.person.BasePerson;
-import cz.cvut.fel.pjv.models.person.DisobedientPerson;
-import cz.cvut.fel.pjv.models.person.ObedientPerson;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.stage.Stage;
+import cz.cvut.fel.pjv.models.SimulationSettings;
+import cz.cvut.fel.pjv.models.person.Person;
+import cz.cvut.fel.pjv.models.person.InfectionPhase;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
+import java.util.List;
+
+import static cz.cvut.fel.pjv.SimulationModel.*;
 
 public class SimulationCanvasHandler implements Handler{
-    public void draw(SimulationModel model) {
-        Stage stage = new Stage();
-        Group root = new Group();
-        Scene scene = new Scene(root);
+    private GraphicsContext context;
+    private float infectionRange;
 
-        for (int i = 0; i < model.getPeople().size(); i++) {
-            BasePerson person = model.getPeople().get(i);
-            if (person instanceof ObedientPerson) {
-                Circle shape = new Circle();
-                shape.setRadius(5);
-                shape.setCenterX(person.getPosition().getX());
-                shape.setCenterY(person.getPosition().getY());
-                root.getChildren().add(shape);
-            } else  {
-                Rectangle shape = new Rectangle();
-                shape.setHeight(10);
-                shape.setWidth(10);
-                shape.setX(person.getPosition().getX());
-                shape.setY(person.getPosition().getY());
-                root.getChildren().add(shape);
-            }
+    public SimulationCanvasHandler(GraphicsContext context, float infectionRange) {
+        this.context = context;
+        this.infectionRange = infectionRange;
+    }
+    public void draw(List<Person> people) {
+        clearCanvas();
+        people.forEach(person -> {
+            drawPerson(person);
+        });
+    }
+    private void drawPerson(Person person) {
+        if (person.getInfectionPhase() == InfectionPhase.INFECTED) {
+            context.setFill(Color.PALEVIOLETRED);
+            context.fillOval(person.getPosition().getX() - infectionRange/2, person.getPosition().getY() - infectionRange/2, infectionRange, infectionRange);
         }
 
-
-
-        stage.setScene(scene);
-        stage.show();
-
-
-
+        context.setFill(person.getInfectionPhase().getColor());
+        if (person.isObedient()) {
+            context.fillOval(person.getPosition().getX() - SIZE/2, person.getPosition().getY() - SIZE/2, SIZE, SIZE);
+        } else {
+            context.fillRect(person.getPosition().getX() - SIZE/2, person.getPosition().getY() - SIZE/2, SIZE, SIZE);
+        }
     }
-    private void drawPerson(BasePerson basePerson) {
 
+    private void clearCanvas() {
+        context.setFill(Color.WHITE);
+        context.fillRect(0,0, WIDTH, HEIGHT);
     }
+
 
 
     @Override
     public void draw() {}
+
+
+    @Override
     public void clear() {}
 }

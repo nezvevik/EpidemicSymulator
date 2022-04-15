@@ -14,7 +14,7 @@ public class SimulationSettings {
     private float mortality;
 
     private boolean isQuarantine;
-    private int quarantineProbability;
+    private double quarantineProbability;
 
     private boolean isMask;
     private float maskEfficiency;
@@ -23,17 +23,15 @@ public class SimulationSettings {
     private int socialDistancingRange;
 
     //constructor
-
-
     public SimulationSettings() {
         this.isGraph = false;
-        this.obedientPopulation = 30;
-        this.disobedientPopulation = 25;
+        this.obedientPopulation = 10;
+        this.disobedientPopulation = 10;
 
-        this.movementSpeed = 1;
+        this.movementSpeed = 1.5F;
 
-        this.infectionProbability = 0;
-        this.infectionRange = 1;
+        this.infectionProbability = 1.0F;
+        this.infectionRange = 30;
         this.incubationPeriod = 0;
         this.mortality = 0;
 
@@ -142,7 +140,7 @@ public class SimulationSettings {
         return isQuarantine;
     }
 
-    public int getQuarantineProbability() {
+    public double getQuarantineProbability() {
         return quarantineProbability;
     }
 

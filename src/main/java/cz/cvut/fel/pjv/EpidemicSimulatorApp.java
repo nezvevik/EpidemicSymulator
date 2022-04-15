@@ -15,6 +15,8 @@ public class EpidemicSimulatorApp extends Application {
         //settings
         SimulationSettings simulationSettings = new SimulationSettings();
 
+        //adjust settings
+
         //starting simulation
         SimulationModel simulationModel = new SimulationModel(simulationSettings);
         simulationModel.runSimulation();
