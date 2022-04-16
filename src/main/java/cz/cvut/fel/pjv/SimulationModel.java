@@ -36,7 +36,8 @@ public class SimulationModel {
             //setting movement vector
             Random rand = new Random();
             double moveAngle = rand.nextDouble()*2*PI;
-            double moveRadius =simulationSettings.getMovementSpeed();
+//            double moveRadius =simulationSettings.getMovementSpeed();
+            double moveRadius = 0;
             Point2D moveVector = new Point2D(Math.cos(moveAngle) * moveRadius, Math.sin(moveAngle) *moveRadius);
 
             //adding people to list
@@ -80,21 +81,19 @@ public class SimulationModel {
             }
         };
         timer.start();
-
-
-
-
     }
 
     private void update() {
-        people.forEach(person -> {
-            updatePosition(person);
-            if (person.getInfectionPhase() == InfectionPhase.INFECTED) {
+        people.forEach(person1 -> {
+//            updatePosition(person1);
+            if (person1.getInfectionPhase() == InfectionPhase.INFECTED) {
+                Random rand = new Random();
                 people.forEach(person2 -> {
                     if (person2.getInfectionPhase() == InfectionPhase.HEALTHY) {
-                        if (isInRange(person, person2)) {
-                            Random rand;
-                            person2.setInfectionPhase(InfectionPhase.INFECTED);
+                        if (isInRange(person1, person2)) {
+                            if(isTransmitted(rand)) {
+                                transmit(person2);
+                            }
                         }
                     }
                 });
@@ -131,12 +130,24 @@ public class SimulationModel {
 
     private boolean isInRange(Person person1, Person person2) {
         boolean ret = false;
-
         double distance = Math.pow(person1.getPosition().getX() - person2.getPosition().getX(), 2) + Math.pow(person1.getPosition().getY() - person2.getPosition().getY(), 2);
+        System.out.println(distance);
         if (distance < Math.pow(simulationSettings.getInfectionRange(), 2)) {
             ret = true;
         }
+        System.out.println(ret);
         return ret;
+    }
+
+    private boolean isTransmitted(Random random) {
+        boolean ret = false;
+        float chance = random.nextFloat();
+        if (chance < simulationSettings.getInfectionProbability()) { ret = true; }
+        return ret;
+    }
+
+    private void transmit(Person person) {
+        person.setInfectionPhase(InfectionPhase.INFECTED);
     }
 
     public List<Person> getPeople() {

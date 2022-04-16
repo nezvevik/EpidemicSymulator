@@ -11,7 +11,7 @@ import java.util.List;
 
 import static cz.cvut.fel.pjv.SimulationModel.*;
 
-public class SimulationCanvasHandler implements Handler{
+public class SimulationCanvasHandler {
     private GraphicsContext context;
     private float infectionRange;
 
@@ -43,13 +43,4 @@ public class SimulationCanvasHandler implements Handler{
         context.setFill(Color.WHITE);
         context.fillRect(0,0, WIDTH, HEIGHT);
     }
-
-
-
-    @Override
-    public void draw() {}
-
-
-    @Override
-    public void clear() {}
 }
