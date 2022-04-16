@@ -25,13 +25,13 @@ public class SimulationSettings {
     //constructor
     public SimulationSettings() {
         this.isGraph = false;
-        this.obedientPopulation = 2;
-        this.disobedientPopulation = 0;
+        this.obedientPopulation = 10;
+        this.disobedientPopulation = 10;
 
         this.movementSpeed = 1.5F;
 
-        this.infectionProbability = 0F;
-        this.infectionRange = 300;
+        this.infectionProbability = 0.05F;
+        this.infectionRange = 20;
         this.incubationPeriod = 0;
         this.mortality = 0;
 

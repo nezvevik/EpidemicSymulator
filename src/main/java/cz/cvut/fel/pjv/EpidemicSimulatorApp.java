@@ -19,7 +19,7 @@ public class EpidemicSimulatorApp extends Application {
 
         //starting simulation
         SimulationModel simulationModel = new SimulationModel(simulationSettings);
-        simulationModel.runSimulation();
+        simulationModel.runSimulation(stage);
     }
 
     public static void main(String[] args) {

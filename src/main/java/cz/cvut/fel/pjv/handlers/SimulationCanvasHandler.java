@@ -28,7 +28,7 @@ public class SimulationCanvasHandler {
     private void drawPerson(Person person) {
         if (person.getInfectionPhase() == InfectionPhase.INFECTED) {
             context.setFill(Color.PALEVIOLETRED);
-            context.fillOval(person.getPosition().getX() - infectionRange/2, person.getPosition().getY() - infectionRange/2, infectionRange, infectionRange);
+            context.fillOval(person.getPosition().getX() - infectionRange, person.getPosition().getY() - infectionRange, infectionRange * 2, infectionRange * 2);
         }
 
         context.setFill(person.getInfectionPhase().getColor());

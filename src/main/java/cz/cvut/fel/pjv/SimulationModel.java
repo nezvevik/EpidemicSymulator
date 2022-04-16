@@ -36,9 +36,10 @@ public class SimulationModel {
             //setting movement vector
             Random rand = new Random();
             double moveAngle = rand.nextDouble()*2*PI;
-//            double moveRadius =simulationSettings.getMovementSpeed();
-            double moveRadius = 0;
-            Point2D moveVector = new Point2D(Math.cos(moveAngle) * moveRadius, Math.sin(moveAngle) *moveRadius);
+
+            double moveRadius = simulationSettings.getMovementSpeed();
+            Point2D moveVector = new Point2D(Math.cos(moveAngle) * moveRadius, Math.sin(moveAngle) * moveRadius);
+            System.out.println(moveVector);
 
             //adding people to list
             boolean isObedient;
@@ -47,18 +48,15 @@ public class SimulationModel {
             } else {
                 isObedient = false;
             }
-            //-10
             people.add(new Person(new Point2D(SIZE + BORDER + rand.nextDouble() * (WIDTH - SIZE - 2 * BORDER),SIZE + BORDER + rand.nextDouble() * (HEIGHT - SIZE - 2 * BORDER)), moveVector, InfectionPhase.HEALTHY, isObedient));
 
-            //setting patient number 0
-            people.get(0).setInfectionPhase(InfectionPhase.INFECTED);
         }
 
+        //setting patient number 0
+        people.get(0).setInfectionPhase(InfectionPhase.INFECTED);
     }
 
-    public void runSimulation() {
-
-        Stage stage = new Stage();
+    public void runSimulation(Stage stage) {
         Group root = new Group();
         Scene scene = new Scene(root);
         Canvas canvas = new Canvas();
@@ -85,7 +83,7 @@ public class SimulationModel {
 
     private void update() {
         people.forEach(person1 -> {
-//            updatePosition(person1);
+            updatePosition(person1);
             if (person1.getInfectionPhase() == InfectionPhase.INFECTED) {
                 Random rand = new Random();
                 people.forEach(person2 -> {
@@ -131,11 +129,9 @@ public class SimulationModel {
     private boolean isInRange(Person person1, Person person2) {
         boolean ret = false;
         double distance = Math.pow(person1.getPosition().getX() - person2.getPosition().getX(), 2) + Math.pow(person1.getPosition().getY() - person2.getPosition().getY(), 2);
-        System.out.println(distance);
         if (distance < Math.pow(simulationSettings.getInfectionRange(), 2)) {
             ret = true;
         }
-        System.out.println(ret);
         return ret;
     }
 
