@@ -30,7 +30,7 @@ public class SimulationSettings {
 
         this.movementSpeed = 1.5F;
 
-        this.infectionProbability = 0.05F;
+        this.infectionProbability = 0.02F;
         this.infectionRange = 20;
         this.incubationPeriod = 0;
         this.mortality = 0;
