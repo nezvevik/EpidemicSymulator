@@ -17,6 +17,18 @@ public class Person {
         this.isObedient = isObedient;
     }
 
+    public void setDirection(Point2D direction) {
+        this.direction = direction;
+    }
+
+    public void setInfectionPhase(InfectionPhase infectionPhase) {
+        this.infectionPhase = infectionPhase;
+    }
+
+    public void setPosition(Point2D position) {
+        this.position = position;
+    }
+    
     public Point2D getPosition() {
         return position;
     }
@@ -29,19 +41,9 @@ public class Person {
         return infectionPhase;
     }
 
-    public void setPosition(Point2D position) {
-        this.position = position;
-    }
-
-    public void setDirection(Point2D direction) {
-        this.direction = direction;
-    }
-
-    public void setInfectionPhase(InfectionPhase infectionPhase) {
-        this.infectionPhase = infectionPhase;
-    }
 
     public boolean isObedient() {
         return isObedient;
     }
+
 }
