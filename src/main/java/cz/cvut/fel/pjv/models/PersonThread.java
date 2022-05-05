@@ -2,6 +2,7 @@ package cz.cvut.fel.pjv.models;
 
 import cz.cvut.fel.pjv.SimulationModel;
 import cz.cvut.fel.pjv.handlers.SimulationCanvasHandler;
+import cz.cvut.fel.pjv.models.person.InfectionPhase;
 import cz.cvut.fel.pjv.models.person.Person;
 
 public class PersonThread extends Thread{
@@ -18,8 +19,12 @@ public class PersonThread extends Thread{
 
     @Override
     public void run() {
-        simulationModel.updatePosition(person);
-        simulationModel.updateInfection(person);
+        if (person.getInfectionPhase() != InfectionPhase.DECEASED) {
+            simulationModel.updatePosition(person);
+            if (person.getInfectionPhase() != InfectionPhase.CURED) {
+                simulationModel.updateInfection(person);
+            }
+        }
         simulationCanvasHandler.drawPerson(person);
 
     }

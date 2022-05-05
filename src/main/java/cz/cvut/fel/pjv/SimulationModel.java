@@ -46,62 +46,48 @@ public class SimulationModel {
 
         //setting patient number 0
         people.get(0).setInfectionPhase(InfectionPhase.INFECTED);
+        infectionTimer(people.get(0));
     }
 
-
-    public void update() {
-        // update position
-        people.forEach(person -> {
-            updatePosition(person);
-        });
-
-        // update infection
-        people.forEach(person -> {
-            updateInfection(person);
-        });
-
-
-
-
-//            if (person1.getInfectionPhase() == InfectionPhase.INFECTED) {
-//                Random rand = new Random();
-//                people.forEach(person2 -> {
-//                    if (person2.getInfectionPhase() == InfectionPhase.HEALTHY) {
-//                        if (isInRange(person1, person2)) {
-//                            if(isTransmitted(rand)) {
-//                                transmit(person2);
-//                            }
-//                        }
+//    public void updatePerson(Person person1) {
+//        if (person1.isObedient() || person1.getInfectionPhase() == InfectionPhase.INFECTED) {
+//            people.forEach(person2 -> {
+//                double distance = getDistance(person1, person2);
+//                if (person1.isObedient()) {
+//                    if (distance <= Math.pow(simulationSettings.getSocialDistancingRange(), 2)) {
+//
 //                    }
-//                });
-//            }
-    }
+//                }
+//            });
+//        }
+//    }
+
     public void updateInfection(Person person) {
         if (person.getInfectionPhase() != InfectionPhase.INFECTED) return;
         Random rand = new Random();
         people.forEach(person2 -> {
             if (person2.getInfectionPhase() != InfectionPhase.HEALTHY) return;
-            if (!isInRange(person, person2)) return;
+            if (!isInRange(person, person2, getSimulationSettings().getInfectionRange())) return;
             if (!isTransmitted(rand)) return;
             transmit(person2);
             infectionTimer(person2);
         });
     }
 
-    private void infectionTimer(Person perosn) {
+    private void infectionTimer(Person person) {
         Timer timer = new Timer();
         Random rand = new Random();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
                 if (simulationSettings.getMortality() >= rand.nextFloat()) {
-                    perosn.setInfectionPhase(InfectionPhase.DECEASED);
+                    person.setInfectionPhase(InfectionPhase.DECEASED);
                 } else {
-                    perosn.setInfectionPhase(InfectionPhase.CURED);
+                    person.setInfectionPhase(InfectionPhase.CURED);
                 }
             }
         };
-        timer.schedule(task,simulationSettings.getIncubationPeriod());
+        timer.schedule(task, simulationSettings.getIncubationPeriod());
     }
 
     public void updatePosition(Person person) {
@@ -111,6 +97,7 @@ public class SimulationModel {
         double vx = person.getDirection().getX();
         double vy = person.getDirection().getY();
 
+        // check position against bounds
         if (x <= uiSettings.getPersonSize()) {
             person.setDirection(new Point2D(-vx, vy));
             vx = -vx;
@@ -128,16 +115,21 @@ public class SimulationModel {
             vy = -vy;
             person.setPosition(new Point2D(x + vx, uiSettings.getSimulationHeight() - uiSettings.getPersonSize()));
         }
+
         person.setPosition(new Point2D(x + vx, y + vy));
     }
 
-    private boolean isInRange(Person person1, Person person2) {
+    private boolean isInRange(Person person1, Person person2, float range) {
         boolean ret = false;
-        double distance = Math.pow(person1.getPosition().getX() - person2.getPosition().getX(), 2) + Math.pow(person1.getPosition().getY() - person2.getPosition().getY(), 2);
-        if (distance < Math.pow(simulationSettings.getInfectionRange(), 2)) {
+        double distance = getDistance(person1, person2);
+        if (distance < Math.pow(range, 2)) {
             ret = true;
         }
         return ret;
+    }
+
+    private double getDistance(Person person1, Person person2) {
+        return Math.pow(person1.getPosition().getX() - person2.getPosition().getX(), 2) + Math.pow(person1.getPosition().getY() - person2.getPosition().getY(), 2);
     }
 
     private boolean isTransmitted(Random random) {

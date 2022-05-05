@@ -9,7 +9,7 @@ public class SimulationSettings {
     private float movementSpeed;
 
     private float infectionProbability;
-    private float infectionRange;
+    private int infectionRange;
     private int incubationPeriod;
     private float mortality;
 
@@ -26,11 +26,11 @@ public class SimulationSettings {
     public SimulationSettings() {
         this.isGraph = false;
         this.obedientPopulation = 20;
-        this.disobedientPopulation = 20;
+        this.disobedientPopulation = 0;
 
         this.movementSpeed = 1.5F;
 
-        this.infectionProbability = 0.02F;
+        this.infectionProbability = 0.2F;
         this.infectionRange = 20;
         this.incubationPeriod = 5000;
         this.mortality = 0.5F;
@@ -42,7 +42,7 @@ public class SimulationSettings {
         this.maskEfficiency = 0;
 
         this.isDistancing = false;
-        this.socialDistancingRange = 0;
+        this.socialDistancingRange = 10;
     }
 
     //setter
@@ -66,7 +66,7 @@ public class SimulationSettings {
         this.infectionProbability = infectionProbability;
     }
 
-    public void setInfectionRange(float infectionRange) {
+    public void setInfectionRange(int infectionRange) {
         this.infectionRange = infectionRange;
     }
 
@@ -124,7 +124,7 @@ public class SimulationSettings {
         return infectionProbability;
     }
 
-    public float getInfectionRange() {
+    public int getInfectionRange() {
         return infectionRange;
     }
 

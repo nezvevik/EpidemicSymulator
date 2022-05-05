@@ -62,9 +62,6 @@ public class SimulationController {
                     }
 
                 });
-//                simulationModel.update();
-//                simulationCanvasHandler.draw(simulationModel.getPeople());
-
 
             }
         };
