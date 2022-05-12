@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -23,10 +24,14 @@ public class SettingsController {
     }
 
     public void initializeSettingsController(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Main.fxml"));
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
-        Canvas canvas = new Canvas();
+        StackPane root = new StackPane();
+        Scene scene = new Scene(root, 400, 400);
+        // button
+        Button startButton = new Button("_Start");
+        startButton.setOnAction(event -> {
+            startButton();
+        });
+        root.getChildren().addAll(startButton);
 
         stage.setScene(scene);
         stage.show();
