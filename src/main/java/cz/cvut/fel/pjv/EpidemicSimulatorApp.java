@@ -1,5 +1,6 @@
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.controllers.ChartController;
 import cz.cvut.fel.pjv.controllers.SettingsController;
 import cz.cvut.fel.pjv.controllers.SimulationController;
 import cz.cvut.fel.pjv.models.SimulationSettings;
@@ -22,18 +23,19 @@ import java.io.IOException;
 public class EpidemicSimulatorApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+
         // settings
         SimulationSettings simulationSettings = new SimulationSettings();
         UISettings uiSettings = new UISettings(400, 400, 10, 20);
+//
+//        //adjust settings window
+//        SettingsController settingsController = new SettingsController(simulationSettings, uiSettings);
+//        settingsController.initializeSettingsController(stage);
 
-        //adjust settings window
-        SettingsController settingsController = new SettingsController(simulationSettings, uiSettings);
-        settingsController.initializeSettingsController(stage);
-
-        //starting simulation window
-//        SimulationModel simulationModel = new SimulationModel(simulationSettings, uiSettings);
-//        SimulationController simulationController = new SimulationController(simulationModel, uiSettings);
-//        simulationController.runSimulation(stage);
+//        starting simulation window
+        SimulationModel simulationModel = new SimulationModel(simulationSettings, uiSettings);
+        SimulationController simulationController = new SimulationController(simulationModel, uiSettings);
+        simulationController.runSimulation(stage);
 
 
         //

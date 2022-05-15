@@ -23,7 +23,7 @@ public class SettingsController {
     }
 
     public void initializeSettingsController(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Chart.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         Canvas canvas = new Canvas();

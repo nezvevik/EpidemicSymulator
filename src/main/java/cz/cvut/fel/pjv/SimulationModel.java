@@ -17,20 +17,31 @@ public class SimulationModel {
     private final SimulationSettings simulationSettings;
     private final UISettings uiSettings;
 
+    private int numOfHealthy;
+    private int numOfInfected;
+
     public SimulationModel(SimulationSettings simulationSettings, UISettings uiSettings) {
         this.simulationSettings = simulationSettings;
         this.uiSettings = uiSettings;
     }
 
+    public int getNumOfInfected() {
+        return numOfInfected;
+    }
+
+    public int getNumOfHealthy() {
+        return numOfHealthy;
+    }
+
     public void initialize() {
-        for (int i = 0; i < simulationSettings.getObedientPopulation() + simulationSettings.getDisobedientPopulation(); i++) {
+        numOfHealthy = simulationSettings.getObedientPopulation() + simulationSettings.getDisobedientPopulation();
+        for (int i = 0; i < numOfHealthy; i++) {
             //setting movement vector
             Random rand = new Random();
             double moveAngle = rand.nextDouble()*2*PI;
 
             double moveRadius = simulationSettings.getMovementSpeed();
             Point2D moveVector = new Point2D(Math.cos(moveAngle) * moveRadius, Math.sin(moveAngle) * moveRadius);
-            System.out.println(moveVector);
 
             // adding people to list
             boolean isObedient;
@@ -47,20 +58,9 @@ public class SimulationModel {
         //setting patient number 0
         people.get(0).setInfectionPhase(InfectionPhase.INFECTED);
         infectionTimer(people.get(0));
+        numOfInfected = 1;
+        numOfHealthy--;
     }
-
-//    public void updatePerson(Person person1) {
-//        if (person1.isObedient() || person1.getInfectionPhase() == InfectionPhase.INFECTED) {
-//            people.forEach(person2 -> {
-//                double distance = getDistance(person1, person2);
-//                if (person1.isObedient()) {
-//                    if (distance <= Math.pow(simulationSettings.getSocialDistancingRange(), 2)) {
-//
-//                    }
-//                }
-//            });
-//        }
-//    }
 
     public void updateInfection(Person person) {
         if (person.getInfectionPhase() != InfectionPhase.INFECTED) return;
@@ -69,6 +69,8 @@ public class SimulationModel {
             if (person2.getInfectionPhase() != InfectionPhase.HEALTHY) return;
             if (!isInRange(person, person2, getSimulationSettings().getInfectionRange())) return;
             if (!isTransmitted(rand)) return;
+            numOfHealthy--;
+            numOfInfected++;
             transmit(person2);
             infectionTimer(person2);
         });
@@ -85,6 +87,7 @@ public class SimulationModel {
                 } else {
                     person.setInfectionPhase(InfectionPhase.CURED);
                 }
+                numOfInfected--;
             }
         };
         timer.schedule(task, simulationSettings.getIncubationPeriod());

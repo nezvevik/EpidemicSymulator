@@ -24,9 +24,9 @@ public class SimulationSettings {
 
     //constructor
     public SimulationSettings() {
-        this.isGraph = false;
-        this.obedientPopulation = 20;
-        this.disobedientPopulation = 0;
+        this.isGraph = true;
+        this.obedientPopulation = 30;
+        this.disobedientPopulation = 20;
 
         this.movementSpeed = 1.5F;
 
