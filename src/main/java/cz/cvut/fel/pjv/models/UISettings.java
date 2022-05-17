@@ -1,24 +1,24 @@
 package cz.cvut.fel.pjv.models;
 
 public class UISettings {
-    private final int simulationWidth;
-    private final int simulationHeight;
+    private final double simulationWidth;
+    private final double simulationHeight;
 
     public final double personSize;
     public final double borderSize;
 
-    public UISettings(int simulationWidth, int simulationHeight, double personSize, double borderSize) {
+    public UISettings(double simulationWidth, double simulationHeight, double personSize, double borderSize) {
         this.simulationWidth = simulationWidth;
         this.simulationHeight = simulationHeight;
         this.personSize = personSize;
         this.borderSize = borderSize;
     }
 
-    public int getSimulationWidth() {
+    public double getSimulationWidth() {
         return simulationWidth;
     }
 
-    public int getSimulationHeight() {
+    public double getSimulationHeight() {
         return simulationHeight;
     }
 

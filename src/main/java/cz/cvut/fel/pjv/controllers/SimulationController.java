@@ -14,6 +14,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -26,13 +28,13 @@ import java.util.ResourceBundle;
 
 public class SimulationController implements Initializable {
     @FXML
-    public Canvas canvasBox;
     public BorderPane borderPane;
+    public Canvas simulationCanvas;
+    public LineChart lineChart;
+    public BarChart barChart;
 
-    private Canvas myCanvas;
-
-    private SimulationSettings simulationSettings;
     private GraphicsContext context;
+    SimulationCanvasHandler simulationCanvasHandler;
 
     private final List<PersonThread> personThreadList = new ArrayList<>();
 
@@ -45,7 +47,7 @@ public class SimulationController implements Initializable {
         @Override
         public void handle(long now) {
             if (now - lastRecord > interval) {
-//                simulationCanvasHandler.clearCanvas();
+                simulationCanvasHandler.clearCanvas();
                 personThreadList.forEach(personThread -> {
                     Thread thread = new Thread(personThread);
                     thread.start();
@@ -61,33 +63,17 @@ public class SimulationController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        context = myCanvas.getGraphicsContext2D();
+        context = simulationCanvas.getGraphicsContext2D();
     }
 
-    public void initSimulationStage(SimulationSettings simulationSettings) throws IOException {
-        this.simulationSettings = simulationSettings;
-        setSimulationStage();
-        runSimulation();
+    public void runSimulation(Stage stage, SimulationSettings simulationSettings) {
+        UISettings uiSettings = new UISettings(simulationCanvas.getWidth(), simulationCanvas.getHeight(), 10, 20);
 
-    }
-
-    public void setSimulationStage() throws IOException {
-//        Stage stage = new Stage();
-//        stage.setTitle("Simulation");
-////        Parent root = new FXMLLoader().load();
-//        Scene scene = new Scene(root);
-//        stage.setScene(scene);
-//        stage.show();
-    }
-
-    public void runSimulation() {
-        UISettings uiSettings = new UISettings(400, 400, 10, 20);
         SimulationModel simulationModel = new SimulationModel(simulationSettings, uiSettings);
-        System.out.println("canvas: " + canvasBox);
-        context = canvasBox.getGraphicsContext2D();
-        SimulationCanvasHandler simulationCanvasHandler = new SimulationCanvasHandler(context, uiSettings, simulationSettings.getInfectionRange());
-
         simulationModel.initSimulationModel();
+
+        simulationCanvasHandler = new SimulationCanvasHandler(context, uiSettings, simulationSettings.getInfectionRange());
+
 
         simulationModel.getPeople().forEach(person -> {
             personThreadList.add(new PersonThread(person, simulationModel, simulationCanvasHandler));
@@ -96,8 +82,5 @@ public class SimulationController implements Initializable {
 
         Movement movement = new Movement();
         movement.start();
-
-
-
     }
 }

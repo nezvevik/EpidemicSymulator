@@ -1,23 +1,14 @@
 package cz.cvut.fel.pjv.controllers;
 
-import cz.cvut.fel.pjv.handlers.SimulationCanvasHandler;
-import cz.cvut.fel.pjv.models.SimulationModel;
-import cz.cvut.fel.pjv.models.SimulationSettings;
-import cz.cvut.fel.pjv.models.UISettings;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import cz.cvut.fel.pjv.models.SimulationSettings;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -25,7 +16,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class SettingsController implements Initializable {
     @FXML
@@ -33,14 +23,6 @@ public class SettingsController implements Initializable {
 
     private List<Label> labels = new ArrayList<>();
     private List<ScrollBar> scrollBars = new ArrayList<>();
-
-    public void initSettingsStage(Stage stage) throws IOException {
-        // setting up stage and loading scene from FXML file
-        stage.setTitle("Settings");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Settings.fxml"));
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -65,12 +47,21 @@ public class SettingsController implements Initializable {
 
     @FXML
     public void runButtonPressed(ActionEvent event) throws IOException {
-        // button that starts the simulation
-        // default UISettings
         SimulationSettings simulationSettings = new SimulationSettings((int) scrollBars.get(0).getValue(), (int) scrollBars.get(1).getValue(), (int) scrollBars.get(2).getValue(),  scrollBars.get(3).getValue(),  scrollBars.get(4).getValue(), (int) scrollBars.get(5).getValue(), scrollBars.get(6).getValue());
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Simulation.fxml"));
-        SimulationController simulationController = (SimulationController) loader.getController();
-        simulationController.initSimulationStage(simulationSettings);
-//        simulationController.runSimulation();
+        FXMLLoader loaderSimulation = new FXMLLoader(getClass().getResource("/Simulation.fxml"));
+
+        Stage stage = new Stage();
+        setSimulationStage(stage, loaderSimulation);
+
+        SimulationController simulationController = (SimulationController) loaderSimulation.getController();
+        simulationController.runSimulation(stage, simulationSettings);
+    }
+
+    private void setSimulationStage(Stage stage, FXMLLoader loaderSimulation) throws IOException {
+        stage.setTitle("Simulation");
+        Parent root = loaderSimulation.load();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 }
