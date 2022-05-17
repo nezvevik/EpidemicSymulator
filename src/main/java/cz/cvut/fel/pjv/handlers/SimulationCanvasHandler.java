@@ -11,10 +11,10 @@ import java.util.List;
 public class SimulationCanvasHandler {
     private GraphicsContext context;
     private final UISettings uiSettings;
-    private float infectionRange;
+    private double infectionRange;
 
 
-    public SimulationCanvasHandler(GraphicsContext context, UISettings uiSettings, float infectionRange) {
+    public SimulationCanvasHandler(GraphicsContext context, UISettings uiSettings, double infectionRange) {
         this.context = context;
         this.uiSettings = uiSettings;
         this.infectionRange = infectionRange;

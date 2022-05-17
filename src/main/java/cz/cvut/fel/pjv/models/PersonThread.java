@@ -1,6 +1,5 @@
 package cz.cvut.fel.pjv.models;
 
-import cz.cvut.fel.pjv.SimulationModel;
 import cz.cvut.fel.pjv.handlers.SimulationCanvasHandler;
 import cz.cvut.fel.pjv.models.person.InfectionPhase;
 import cz.cvut.fel.pjv.models.person.Person;

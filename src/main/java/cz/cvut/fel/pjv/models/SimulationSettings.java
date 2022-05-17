@@ -6,10 +6,10 @@ public class SimulationSettings {
     private int obedientPopulation;
     private int disobedientPopulation;
 
-    private float movementSpeed;
+    private double movementSpeed;
 
     private float infectionProbability;
-    private int infectionRange;
+    private double infectionRange;
     private int incubationPeriod;
     private float mortality;
 
@@ -28,7 +28,7 @@ public class SimulationSettings {
         this.obedientPopulation = 30;
         this.disobedientPopulation = 20;
 
-        this.movementSpeed = 1.5F;
+        this.movementSpeed = 1.5;
 
         this.infectionProbability = 0.2F;
         this.infectionRange = 20;
@@ -45,6 +45,16 @@ public class SimulationSettings {
         this.socialDistancingRange = 10;
     }
 
+    public SimulationSettings(int obedientPopulation, int disobedientPopulation, int incubationPeriod, double infectionProbability, double infectionRange,  double mortality, double movementSpeed) {
+        this.obedientPopulation = obedientPopulation;
+        this.disobedientPopulation = disobedientPopulation;
+        this.movementSpeed =  movementSpeed;
+        this.infectionProbability = (float) (infectionProbability / 100.0);
+        this.infectionRange = infectionRange;
+        this.incubationPeriod = incubationPeriod * 1000; //received in seconds thus has to be converted to ms
+        this.mortality = (float) (mortality / 100.0);
+    }
+
     //setter
     public void setGraph(boolean graph) {
         isGraph = graph;
@@ -58,7 +68,7 @@ public class SimulationSettings {
         this.disobedientPopulation = disobedientPopulation;
     }
 
-    public void setMovementSpeed(float movementSpeed) {
+    public void setMovementSpeed(double movementSpeed) {
         this.movementSpeed = movementSpeed;
     }
 
@@ -116,7 +126,7 @@ public class SimulationSettings {
         return disobedientPopulation;
     }
 
-    public float getMovementSpeed() {
+    public double getMovementSpeed() {
         return movementSpeed;
     }
 
@@ -124,7 +134,7 @@ public class SimulationSettings {
         return infectionProbability;
     }
 
-    public int getInfectionRange() {
+    public double getInfectionRange() {
         return infectionRange;
     }
 

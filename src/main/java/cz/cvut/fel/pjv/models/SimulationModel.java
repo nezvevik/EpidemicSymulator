@@ -1,8 +1,6 @@
-package cz.cvut.fel.pjv;
+package cz.cvut.fel.pjv.models;
 
-import cz.cvut.fel.pjv.models.UISettings;
 import cz.cvut.fel.pjv.models.person.Person;
-import cz.cvut.fel.pjv.models.SimulationSettings;
 import cz.cvut.fel.pjv.models.person.InfectionPhase;
 import javafx.geometry.Point2D;
 
@@ -33,9 +31,12 @@ public class SimulationModel {
         return numOfHealthy;
     }
 
-    public void initialize() {
-        numOfHealthy = simulationSettings.getObedientPopulation() + simulationSettings.getDisobedientPopulation();
-        for (int i = 0; i < numOfHealthy; i++) {
+    public void initSimulationModel() {
+        int totalPeople = simulationSettings.getObedientPopulation() + simulationSettings.getDisobedientPopulation();
+        if (totalPeople <= 0) {
+            return;
+        }
+        for (int i = 0; i < totalPeople; i++) {
             //setting movement vector
             Random rand = new Random();
             double moveAngle = rand.nextDouble()*2*PI;
@@ -59,7 +60,7 @@ public class SimulationModel {
         people.get(0).setInfectionPhase(InfectionPhase.INFECTED);
         infectionTimer(people.get(0));
         numOfInfected = 1;
-        numOfHealthy--;
+        numOfHealthy = totalPeople - 1;
     }
 
     public void updateInfection(Person person) {
@@ -122,7 +123,7 @@ public class SimulationModel {
         person.setPosition(new Point2D(x + vx, y + vy));
     }
 
-    private boolean isInRange(Person person1, Person person2, float range) {
+    private boolean isInRange(Person person1, Person person2, double range) {
         boolean ret = false;
         double distance = getDistance(person1, person2);
         if (distance < Math.pow(range, 2)) {
