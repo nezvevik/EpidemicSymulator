@@ -16,6 +16,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -38,8 +40,6 @@ public class SettingsController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Settings.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
     }
 
     @Override
