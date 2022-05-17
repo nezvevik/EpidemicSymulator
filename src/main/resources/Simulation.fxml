@@ -26,22 +26,22 @@
    <bottom>
       <HBox alignment="CENTER" prefHeight="31.0" prefWidth="628.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="resetButton" alignment="CENTER" mnemonicParsing="false" text="Reset" textAlignment="CENTER">
+            <Button fx:id="resetButton" alignment="CENTER" mnemonicParsing="false" onAction="#resetButtonPressed" text="Reset" textAlignment="CENTER">
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="startButton" alignment="CENTER" mnemonicParsing="false" text="Start" textAlignment="CENTER">
+            <Button fx:id="startButton" alignment="CENTER" mnemonicParsing="false" onAction="#startButtonPressed" text="Start" textAlignment="CENTER">
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="stopButton" alignment="CENTER" mnemonicParsing="false" text="Stop" textAlignment="CENTER">
+            <Button fx:id="stopButton" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#stopButtonPressed" text="Stop" textAlignment="CENTER">
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="stepButton" alignment="CENTER" mnemonicParsing="false" text="Step" textAlignment="CENTER">
+            <Button fx:id="stepButton" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#stepButtonPressed" text="Step" textAlignment="CENTER">
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin>
@@ -69,7 +69,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <LineChart fx:id="lineChart">
+                  <LineChart fx:id="lineChart" minWidth="0.0">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>

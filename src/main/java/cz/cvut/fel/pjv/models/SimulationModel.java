@@ -32,6 +32,10 @@ public class SimulationModel {
     }
 
     public void initSimulationModel() {
+        System.out.println("neco delam");
+        System.out.println(people);
+        people.clear();
+        System.out.println(people);
         int totalPeople = simulationSettings.getObedientPopulation() + simulationSettings.getDisobedientPopulation();
         if (totalPeople <= 0) {
             return;

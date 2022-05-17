@@ -17,6 +17,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -30,10 +31,19 @@ public class SimulationController implements Initializable {
     @FXML
     public BorderPane borderPane;
     public Canvas simulationCanvas;
+    
     public LineChart lineChart;
     public BarChart barChart;
+    
+    public Button resetButton;
+    public Button startButton;
+    public Button stopButton;
+    public Button stepButton;
 
+
+    private SimulationModel simulationModel;
     private GraphicsContext context;
+    private Movement movement;
     SimulationCanvasHandler simulationCanvasHandler;
 
     private final List<PersonThread> personThreadList = new ArrayList<>();
@@ -69,7 +79,7 @@ public class SimulationController implements Initializable {
     public void runSimulation(Stage stage, SimulationSettings simulationSettings) {
         UISettings uiSettings = new UISettings(simulationCanvas.getWidth(), simulationCanvas.getHeight(), 10, 20);
 
-        SimulationModel simulationModel = new SimulationModel(simulationSettings, uiSettings);
+        simulationModel = new SimulationModel(simulationSettings, uiSettings);
         simulationModel.initSimulationModel();
 
         simulationCanvasHandler = new SimulationCanvasHandler(context, uiSettings, simulationSettings.getInfectionRange());
@@ -80,7 +90,33 @@ public class SimulationController implements Initializable {
         });
 
 
-        Movement movement = new Movement();
-        movement.start();
+        movement = new Movement();
     }
+
+    public void resetButtonPressed () {
+        System.out.println("reset");
+//        movement.stop();
+//        simulationModel.initSimulationModel();
+
+    }
+
+    public void startButtonPressed () {
+        System.out.println("start");
+        movement.start();
+        startButton.setDisable(true);
+        stopButton.setDisable(false);
+    }
+
+    public void stopButtonPressed () {
+        System.out.println("stop");
+        movement.stop();
+        stopButton.setDisable(true);
+        startButton.setDisable(false);
+    }
+
+    public void stepButtonPressed () {
+        System.out.println("step");
+    }
+
+
 }
