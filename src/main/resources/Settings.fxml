@@ -57,7 +57,7 @@
             <ScrollBar fx:id="mortalitySlider" value="50.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <ScrollBar fx:id="movementSpeedSlider" blockIncrement="5.0" max="5.0" min="1.0" value="2.0" visibleAmount="1.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <ScrollBar fx:id="maskEfficiencySlider" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <ScrollBar fx:id="distancingSlider" max="50.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <ScrollBar fx:id="distancingSlider" GridPane.columnIndex="1" GridPane.rowIndex="8" />
             <Label text="Disobedient population" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="5.0" />

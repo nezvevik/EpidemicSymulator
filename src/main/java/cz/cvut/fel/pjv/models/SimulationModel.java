@@ -102,25 +102,30 @@ public class SimulationModel {
         double vx = person.getDirection().getX();
         double vy = person.getDirection().getY();
 
+        double ox = person.getOriginPosition().getX();
+        double oy = person.getOriginPosition().getY();
+
+        double distance = simulationSettings.getSocialDistancingRange();
+
         // check position against bounds
-        if (x <= uiSettings.getPersonSize()) {
-            person.setDirection(new Point2D(-vx, vy));
+        if (x <= ox - distance || x >= ox + distance) {
+            vx = -vx;
+        } else if (y <= oy - distance || y >= oy + distance) {
+            vy = -vy;
+        } else if (x <= uiSettings.getPersonSize()) {
             vx = -vx;
             person.setPosition(new Point2D(uiSettings.getPersonSize(), y + vy));
         } else if (x  + uiSettings.getPersonSize() >= uiSettings.getSimulationWidth()) {
-            person.setDirection(new Point2D(-vx, vy));
             vx = -vx;
             person.setPosition(new Point2D(uiSettings.getSimulationWidth() - uiSettings.getPersonSize(), y + vy));
         } else if (y <=  uiSettings.getPersonSize()) {
-            person.setDirection(new Point2D(vx, -vy));
             vy = -vy;
             person.setPosition(new Point2D(x + vx, uiSettings.getPersonSize()));
         } else if (y  + uiSettings.getPersonSize() >= uiSettings.getSimulationHeight()) {
-            person.setDirection(new Point2D(vx, -vy));
             vy = -vy;
             person.setPosition(new Point2D(x + vx, uiSettings.getSimulationHeight() - uiSettings.getPersonSize()));
         }
-
+        person.setDirection(new Point2D(vx, vy));
         person.setPosition(new Point2D(x + vx, y + vy));
     }
 

@@ -59,7 +59,7 @@ public class SettingsController implements Initializable {
                 maskCheckBox.isSelected(),
                 scrollBars.get(7).getValue(),
                 distancingCheckBox.isSelected(),
-                scrollBars.get(6).getValue());
+                scrollBars.get(8).getValue());
         FXMLLoader loaderSimulation = new FXMLLoader(getClass().getResource("/Simulation.fxml"));
 
         Stage stage = new Stage();
