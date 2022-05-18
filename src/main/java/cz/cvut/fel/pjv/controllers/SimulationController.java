@@ -55,13 +55,16 @@ public class SimulationController implements Initializable {
     private SimulationModel simulationModel;
     private GraphicsContext context;
     private Movement movement;
-    SimulationCanvasHandler simulationCanvasHandler;
+    private SimulationCanvasHandler simulationCanvasHandler;
+
+    private long FPS;
+
 
     private final List<PersonThread> personThreadList = new ArrayList<>();
 
     private class Movement extends AnimationTimer {
-        private final long FPS = 30L;
-        private final long interval = 1_000_000_000L/FPS;
+        private final long movementFPS = FPS;
+        private final long interval = 1_000_000_000L/movementFPS;
         private long offset = 50;
 
         private long lastRecord = 0;
@@ -113,7 +116,8 @@ public class SimulationController implements Initializable {
         this.stage = stage;
         this.simulationSettings = simulationSettings;
 
-        UISettings uiSettings = new UISettings(simulationCanvas.getWidth(), simulationCanvas.getHeight(), 10, 20);
+        UISettings uiSettings = new UISettings(simulationCanvas.getWidth(), simulationCanvas.getHeight(), 10, 20, 30L);
+        FPS = uiSettings.getFPS();
 
         simulationModel = new SimulationModel(simulationSettings, uiSettings);
         simulationModel.initSimulationModel();
@@ -150,7 +154,6 @@ public class SimulationController implements Initializable {
             @Override
             public void handle(WindowEvent windowEvent) {
                 movement.stop();
-//                Platform.exit();
             }
         });
 

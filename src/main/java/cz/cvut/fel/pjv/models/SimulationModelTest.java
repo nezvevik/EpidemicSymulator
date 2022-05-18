@@ -30,7 +30,6 @@ public class SimulationModelTest {
     public void updatePositionTest2() {
         Person person = new Person(new Point2D(495, 100), new Point2D(10, 0),InfectionPhase.HEALTHY, true);
         simulationModel.updatePosition(person);
-        System.out.println(person.getPosition().getX());
         assertTrue(person.getPosition().getX() == 485 && person.getPosition().getY() == 100);
     }
 }

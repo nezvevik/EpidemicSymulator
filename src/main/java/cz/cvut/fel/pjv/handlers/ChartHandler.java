@@ -18,10 +18,7 @@ public class ChartHandler {
         statSeries = new XYChart.Series<>();
         barChart.getData().add(statSeries);
     }
-
-//    public void updateSeries(XYChart.Series<Number, Number> series, long x, int y) {
-//        series.getData().add(new XYChart.Data<>(x, y));
-//    }
+    
 
     public void updateBarSeries(long counter, XYChart.Series statSeries, SimulationModel simulationModel) {
         statSeries.getData().add(new XYChart.Data<>("Healthy", simulationModel.getNumOfHealthy()));

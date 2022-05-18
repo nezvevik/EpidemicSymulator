@@ -174,9 +174,7 @@ public class SimulationModel {
     private boolean isTransmitted(Random random) {
         boolean ret = false;
         float chance = random.nextFloat();
-        System.out.println(uiSettings.getFPS());
         float probabilityPerFrame = (float) (1 - Math.pow((double) (1 -  simulationSettings.getInfectionProbability()), (double) (1.0/(float)uiSettings.getFPS())));
-        System.out.println(probabilityPerFrame);
         if (chance < probabilityPerFrame) { ret = true; }
         return ret;
     }

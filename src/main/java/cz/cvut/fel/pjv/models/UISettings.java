@@ -7,7 +7,7 @@ public class UISettings {
     public final double personSize;
     public final double borderSize;
 
-    private final long FPS = 30L;
+    private final long FPS;
 
 
     public UISettings(double simulationWidth, double simulationHeight, double personSize, double borderSize) {
@@ -15,6 +15,15 @@ public class UISettings {
         this.simulationHeight = simulationHeight;
         this.personSize = personSize;
         this.borderSize = borderSize;
+        this.FPS = 30L;
+    }
+
+    public UISettings(double simulationWidth, double simulationHeight, double personSize, double borderSize, long FPS) {
+        this.simulationWidth = simulationWidth;
+        this.simulationHeight = simulationHeight;
+        this.personSize = personSize;
+        this.borderSize = borderSize;
+        this.FPS = FPS;
     }
 
     public double getSimulationWidth() {
