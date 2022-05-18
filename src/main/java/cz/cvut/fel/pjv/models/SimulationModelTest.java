@@ -16,10 +16,6 @@ public class SimulationModelTest {
     }
 
     @org.junit.Test
-    public void updateInfectionTest() {
-    }
-
-    @org.junit.Test
     public void updatePositionTest1() {
         Person person = new Person(new Point2D(100, 100), new Point2D(1, 0),InfectionPhase.HEALTHY, true);
         simulationModel.updatePosition(person);
@@ -31,5 +27,12 @@ public class SimulationModelTest {
         Person person = new Person(new Point2D(495, 100), new Point2D(10, 0),InfectionPhase.HEALTHY, true);
         simulationModel.updatePosition(person);
         assertTrue(person.getPosition().getX() == 485 && person.getPosition().getY() == 100);
+    }
+
+    @org.junit.Test
+    public void updatePositionTest3() {
+        Person person = new Person(new Point2D(100, 495), new Point2D(0, 10),InfectionPhase.HEALTHY, true);
+        simulationModel.updatePosition(person);
+        assertTrue(person.getPosition().getX() == 100 && person.getPosition().getY() == 485);
     }
 }
