@@ -15,6 +15,7 @@ public class SimulationModel {
     private final SimulationSettings simulationSettings;
     private final UISettings uiSettings;
 
+    private int numOfPeople;
     private int numOfHealthy;
     private int numOfInfected;
 
@@ -33,11 +34,11 @@ public class SimulationModel {
 
     public void initSimulationModel() {
         people.clear();
-        int totalPeople = simulationSettings.getObedientPopulation() + simulationSettings.getDisobedientPopulation();
-        if (totalPeople <= 0) {
+        numOfPeople = simulationSettings.getObedientPopulation() + simulationSettings.getDisobedientPopulation();
+        if (SimulationModel.this.numOfPeople <= 0) {
             return;
         }
-        for (int i = 0; i < totalPeople; i++) {
+        for (int i = 0; i < SimulationModel.this.numOfPeople; i++) {
             //setting movement vector
             Random rand = new Random();
             double moveAngle = rand.nextDouble()*2*PI;
@@ -59,9 +60,8 @@ public class SimulationModel {
 
         //setting patient number 0
         people.get(0).setInfectionPhase(InfectionPhase.INFECTED);
-        infectionTimer(people.get(0));
         numOfInfected = 1;
-        numOfHealthy = totalPeople - 1;
+        numOfHealthy = numOfPeople - 1;
     }
 
     public void updateInfection(Person person) {
@@ -78,7 +78,11 @@ public class SimulationModel {
         });
     }
 
-    private void infectionTimer(Person person) {
+    /**
+     * Timer that counts down disease
+     * @param person
+     */
+    public void infectionTimer(Person person) {
         Timer timer = new Timer();
         Random rand = new Random();
         TimerTask task = new TimerTask() {
@@ -95,6 +99,11 @@ public class SimulationModel {
         timer.schedule(task, simulationSettings.getIncubationPeriod());
     }
 
+
+    /**
+     * Updates position and direction of a person by calculating whether it collided with the border.
+     * @param person
+     */
     public void updatePosition(Person person) {
         double x = person.getPosition().getX();
         double y = person.getPosition().getY();
@@ -105,7 +114,12 @@ public class SimulationModel {
         double ox = person.getOriginPosition().getX();
         double oy = person.getOriginPosition().getY();
 
-        double distance = simulationSettings.getSocialDistancingRange();
+        double distance;
+        if (simulationSettings.isDistancing() && person.isObedient()) {
+            distance = simulationSettings.getSocialDistancingRange();
+        } else {
+            distance = 100000;
+        }
 
         // check position against bounds
         if (x <= ox - distance || x >= ox + distance) {
@@ -141,14 +155,29 @@ public class SimulationModel {
         return ret;
     }
 
+    /**
+     * Returns distance between two people squared.
+     * @param person1
+     * @param person2
+     * @return
+     */
     private double getDistance(Person person1, Person person2) {
         return Math.pow(person1.getPosition().getX() - person2.getPosition().getX(), 2) + Math.pow(person1.getPosition().getY() - person2.getPosition().getY(), 2);
     }
 
+    /**
+     * Function that calculates probability per frame and determines whether it was achieved.
+     *
+     * @param random
+     * @return
+     */
     private boolean isTransmitted(Random random) {
         boolean ret = false;
         float chance = random.nextFloat();
-        if (chance < simulationSettings.getInfectionProbability()) { ret = true; }
+        System.out.println(uiSettings.getFPS());
+        float probabilityPerFrame = (float) (1 - Math.pow((double) (1 -  simulationSettings.getInfectionProbability()), (double) (1.0/(float)uiSettings.getFPS())));
+        System.out.println(probabilityPerFrame);
+        if (chance < probabilityPerFrame) { ret = true; }
         return ret;
     }
 
@@ -164,4 +193,7 @@ public class SimulationModel {
         return simulationSettings;
     }
 
+    public int getNumOfPeople() {
+        return numOfPeople;
+    }
 }

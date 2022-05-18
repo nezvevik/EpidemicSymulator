@@ -6,7 +6,10 @@ import cz.cvut.fel.pjv.handlers.SimulationCanvasHandler;
 import cz.cvut.fel.pjv.models.PersonThread;
 import cz.cvut.fel.pjv.models.SimulationSettings;
 import cz.cvut.fel.pjv.models.UISettings;
+import cz.cvut.fel.pjv.models.person.InfectionPhase;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,6 +24,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -37,13 +41,16 @@ public class SimulationController implements Initializable {
     public BarChart barChart;
 
     private ChartHandler chartHandler;
-    private XYChart.Series series;
+    private XYChart.Series healthySeries;
+    private XYChart.Series infectedSeries;
+    private XYChart.Series statSeries;
     
     public Button resetButton;
     public Button startButton;
     public Button stopButton;
-    public Button stepButton;
 
+    private Stage stage;
+    private SimulationSettings simulationSettings;
 
     private SimulationModel simulationModel;
     private GraphicsContext context;
@@ -53,20 +60,35 @@ public class SimulationController implements Initializable {
     private final List<PersonThread> personThreadList = new ArrayList<>();
 
     private class Movement extends AnimationTimer {
-        private final long frames_per_second = 50L;
-        private final long interval = 1_000_000_000L/frames_per_second;
-        private long offset = 30;
+        private final long FPS = 30L;
+        private final long interval = 1_000_000_000L/FPS;
+        private long offset = 50;
 
         private long lastRecord = 0;
         private long counter = 0;
+        private boolean updateGraph = true;
+
+        public Movement() {
+            lastRecord = 0;
+            counter = 0;
+            updateGraph = true;
+        }
 
         @Override
         public void handle(long now) {
             if (now - lastRecord > interval) {
-                if (counter % offset == 0) {
-                    series.getData().add(new XYChart.Data<>(counter, simulationModel.getNumOfHealthy()));
+                if (updateGraph) {
+                    if (simulationModel.getNumOfInfected() == 0) {
+                        chartHandler.updateBarSeries(counter, statSeries, simulationModel);
+                        updateGraph = false;
+                    }
+                    if (counter % offset == 0) {
+                        healthySeries.getData().add(new XYChart.Data<>(counter, simulationModel.getNumOfHealthy()));
+                        infectedSeries.getData().add(new XYChart.Data<>(counter, simulationModel.getNumOfInfected()));
+                        chartHandler.updateBarSeries(counter, statSeries, simulationModel);
+                    }
+                    counter++;
                 }
-                counter++;
                 simulationCanvasHandler.clearCanvas();
                 personThreadList.forEach(personThread -> {
                     Thread thread = new Thread(personThread);
@@ -77,6 +99,7 @@ public class SimulationController implements Initializable {
                         e.printStackTrace();
                     }
                 });
+                lastRecord = now;
             }
         }
     }
@@ -87,6 +110,9 @@ public class SimulationController implements Initializable {
     }
 
     public void runSimulation(Stage stage, SimulationSettings simulationSettings) throws IOException {
+        this.stage = stage;
+        this.simulationSettings = simulationSettings;
+
         UISettings uiSettings = new UISettings(simulationCanvas.getWidth(), simulationCanvas.getHeight(), 10, 20);
 
         simulationModel = new SimulationModel(simulationSettings, uiSettings);
@@ -101,11 +127,17 @@ public class SimulationController implements Initializable {
 
         simulationCanvasHandler = new SimulationCanvasHandler(context, uiSettings, simulationSettings.getInfectionRange(), maskInfectionRange);
 
-        series = new XYChart.Series<>();
-        lineChart.getData().add(series);
+        // set up graphs
+        chartHandler = new ChartHandler();
+        healthySeries = new XYChart.Series<>();
+        lineChart.getData().add(healthySeries);
+        infectedSeries = new XYChart.Series<>();
+        lineChart.getData().add(infectedSeries);
+        statSeries = new XYChart.Series<>();
+        barChart.getData().add(statSeries);
 
 
-
+        personThreadList.clear();
         simulationModel.getPeople().forEach(person -> {
             personThreadList.add(new PersonThread(person, simulationModel, simulationCanvasHandler));
         });
@@ -113,36 +145,44 @@ public class SimulationController implements Initializable {
 
         movement = new Movement();
 
+        stage.setResizable(false);
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                movement.stop();
+//                Platform.exit();
+            }
+        });
 
-        chartHandler = new ChartHandler();
-//        chartHandler.setBarSeries(barChart);
-//        chartHandler.setLineSeries(lineChart);
+
+
     }
 
-    public void resetButtonPressed () {
-        System.out.println("reset");
-//        movement.stop();
-//        simulationModel.initSimulationModel();
-
+    public void resetButtonPressed () throws IOException {
+        movement.stop();
+        simulationCanvasHandler.clearCanvas();
+        runSimulation(stage, simulationSettings);
+        startButton.setDisable(false);
+        resetButton.setDisable(true);
+        stopButton.setDisable(true);
     }
 
     public void startButtonPressed () {
-        System.out.println("start");
+        simulationModel.getPeople().forEach(person -> {
+            if (person.getInfectionPhase() == InfectionPhase.INFECTED) {
+                simulationModel.infectionTimer(person);
+            }
+        });
         movement.start();
         startButton.setDisable(true);
         stopButton.setDisable(false);
+        resetButton.setDisable(true);
     }
 
     public void stopButtonPressed () {
-        System.out.println("stop");
         movement.stop();
         stopButton.setDisable(true);
         startButton.setDisable(false);
+        resetButton.setDisable(false);
     }
-
-    public void stepButtonPressed () {
-        System.out.println("step");
-    }
-
-
 }

@@ -1,5 +1,7 @@
 package cz.cvut.fel.pjv.controllers;
 
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import cz.cvut.fel.pjv.models.SimulationSettings;
 import javafx.event.ActionEvent;
@@ -10,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -63,6 +66,7 @@ public class SettingsController implements Initializable {
         FXMLLoader loaderSimulation = new FXMLLoader(getClass().getResource("/Simulation.fxml"));
 
         Stage stage = new Stage();
+        stage.setResizable(false);
         setSimulationStage(stage, loaderSimulation);
 
         SimulationController simulationController = (SimulationController) loaderSimulation.getController();
@@ -70,6 +74,14 @@ public class SettingsController implements Initializable {
     }
 
     private void setSimulationStage(Stage stage, FXMLLoader loaderSimulation) throws IOException {
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                System.out.println("closing");
+                Platform.exit();
+                System.exit(0);
+            }
+        });
         stage.setTitle("Simulation");
         Parent root = loaderSimulation.load();
         Scene scene = new Scene(root);
