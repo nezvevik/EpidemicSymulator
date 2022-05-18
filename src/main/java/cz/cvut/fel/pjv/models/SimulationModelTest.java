@@ -35,4 +35,17 @@ public class SimulationModelTest {
         simulationModel.updatePosition(person);
         assertTrue(person.getPosition().getX() == 100 && person.getPosition().getY() == 485);
     }
+
+    @org.junit.Test
+    public void updatePositionTest4() {
+        Person person = new Person(new Point2D(100, 5), new Point2D(0, -10),InfectionPhase.HEALTHY, true);
+        simulationModel.updatePosition(person);
+        assertTrue(person.getPosition().getX() == 100 && person.getPosition().getY() == 15);
+    }
+    @org.junit.Test
+    public void updatePositionTest5() {
+        Person person = new Person(new Point2D(5, 100), new Point2D(-10, 0),InfectionPhase.HEALTHY, true);
+        simulationModel.updatePosition(person);
+        assertTrue(person.getPosition().getX() == 15 && person.getPosition().getY() == 100);
+    }
 }
