@@ -13,9 +13,6 @@ public class SimulationSettings {
     private int incubationPeriod;
     private float mortality;
 
-    private boolean isQuarantine;
-    private double quarantineProbability;
-
     private boolean isMask;
     private float maskEfficiency;
 
@@ -35,9 +32,6 @@ public class SimulationSettings {
         this.incubationPeriod = 5000;
         this.mortality = 0.5F;
 
-        this.isQuarantine = false;
-        this.quarantineProbability = 0;
-
         this.isMask = false;
         this.maskEfficiency = 0;
 
@@ -45,7 +39,8 @@ public class SimulationSettings {
         this.socialDistancingRange = 10;
     }
 
-    public SimulationSettings(int obedientPopulation, int disobedientPopulation, int incubationPeriod, double infectionProbability, double infectionRange,  double mortality, double movementSpeed) {
+    public SimulationSettings(int obedientPopulation, int disobedientPopulation, int incubationPeriod, double infectionProbability, double infectionRange,  double mortality, double movementSpeed, boolean
+            isMask, double maskEfficiency, boolean isDistancing, double socialDistancingRange) {
         this.obedientPopulation = obedientPopulation;
         this.disobedientPopulation = disobedientPopulation;
         this.movementSpeed =  movementSpeed;
@@ -53,6 +48,11 @@ public class SimulationSettings {
         this.infectionRange = infectionRange;
         this.incubationPeriod = incubationPeriod * 1000; //received in seconds thus has to be converted to ms
         this.mortality = (float) (mortality / 100.0);
+
+        this.isMask = isMask;
+        this.maskEfficiency = (float) maskEfficiency;
+        this.isDistancing = isDistancing;
+        this.socialDistancingRange = (int) socialDistancingRange;
     }
 
     //setter
@@ -86,14 +86,6 @@ public class SimulationSettings {
 
     public void setMortality(float mortality) {
         this.mortality = mortality;
-    }
-
-    public void setQuarantine(boolean quarantine) {
-        isQuarantine = quarantine;
-    }
-
-    public void setQuarantineProbability(int quarantineProbability) {
-        this.quarantineProbability = quarantineProbability;
     }
 
     public void setMask(boolean mask) {
@@ -144,14 +136,6 @@ public class SimulationSettings {
 
     public float getMortality() {
         return mortality;
-    }
-
-    public boolean isQuarantine() {
-        return isQuarantine;
-    }
-
-    public double getQuarantineProbability() {
-        return quarantineProbability;
     }
 
     public boolean isMask() {

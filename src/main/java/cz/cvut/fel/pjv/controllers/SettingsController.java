@@ -19,7 +19,9 @@ import java.util.ResourceBundle;
 
 public class SettingsController implements Initializable {
     @FXML
-    public GridPane gridPane1;
+    public GridPane gridPane;
+    public CheckBox distancingCheckBox;
+    public CheckBox maskCheckBox;
 
     private List<Label> labels = new ArrayList<>();
     private List<ScrollBar> scrollBars = new ArrayList<>();
@@ -27,19 +29,20 @@ public class SettingsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // finding labels from third column and putting them in a list
-        gridPane1.getChildren().forEach(node -> {
-            if (gridPane1.getColumnIndex(node) != null && gridPane1.getColumnIndex(node) == 2) {
+        gridPane.getChildren().forEach(node -> {
+            if (gridPane.getColumnIndex(node) != null && gridPane.getColumnIndex(node) == 2) {
                 labels.add((Label) node);
             }
         });
 
         // going through all ScrollBars and linking them to according labels
-        gridPane1.getChildren().forEach(node -> {
+        gridPane.getChildren().forEach(node -> {
             if (node instanceof ScrollBar) {
                 scrollBars.add((ScrollBar) node);
-                labels.get(gridPane1.getRowIndex(node)).setText(String.valueOf((int) ((ScrollBar) node).getValue()));
+                System.out.println(gridPane.getRowIndex(node));
+                labels.get(gridPane.getRowIndex(node)).setText(String.valueOf((int) ((ScrollBar) node).getValue()));
                 ((ScrollBar) node).valueProperty().addListener((observableValue, number, t1) -> {
-                    labels.get(gridPane1.getRowIndex(node)).setText(String.valueOf((int) ((ScrollBar) node).getValue()));
+                    labels.get(gridPane.getRowIndex(node)).setText(String.valueOf((int) ((ScrollBar) node).getValue()));
                 });
             }
         });
@@ -47,7 +50,17 @@ public class SettingsController implements Initializable {
 
     @FXML
     public void runButtonPressed(ActionEvent event) throws IOException {
-        SimulationSettings simulationSettings = new SimulationSettings((int) scrollBars.get(0).getValue(), (int) scrollBars.get(1).getValue(), (int) scrollBars.get(2).getValue(),  scrollBars.get(3).getValue(),  scrollBars.get(4).getValue(), (int) scrollBars.get(5).getValue(), scrollBars.get(6).getValue());
+        SimulationSettings simulationSettings = new SimulationSettings((int) scrollBars.get(0).getValue(),
+                (int) scrollBars.get(1).getValue(),
+                (int) scrollBars.get(2).getValue(),
+                scrollBars.get(3).getValue(),
+                scrollBars.get(4).getValue(),
+                (int) scrollBars.get(5).getValue(),
+                scrollBars.get(6).getValue(),
+                maskCheckBox.isSelected(),
+                scrollBars.get(7).getValue(),
+                distancingCheckBox.isSelected(),
+                scrollBars.get(6).getValue());
         FXMLLoader loaderSimulation = new FXMLLoader(getClass().getResource("/Simulation.fxml"));
 
         Stage stage = new Stage();
