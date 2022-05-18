@@ -62,6 +62,9 @@ public class SimulationController implements Initializable {
 
     private final List<PersonThread> personThreadList = new ArrayList<>();
 
+    /**
+     *  Custom class for handling movement of a person.
+     */
     private class Movement extends AnimationTimer {
         private final long movementFPS = FPS;
         private final long interval = 1_000_000_000L/movementFPS;
@@ -77,9 +80,15 @@ public class SimulationController implements Initializable {
             updateGraph = true;
         }
 
+        /**
+         * Updates each threads position and graphs if specific interval has passed.
+         * @param now
+         */
         @Override
         public void handle(long now) {
             if (now - lastRecord > interval) {
+
+                // update graphs
                 if (updateGraph) {
                     if (simulationModel.getNumOfInfected() == 0) {
                         chartHandler.updateBarSeries(counter, statSeries, simulationModel);
@@ -92,6 +101,7 @@ public class SimulationController implements Initializable {
                     }
                     counter++;
                 }
+                // update people
                 simulationCanvasHandler.clearCanvas();
                 personThreadList.forEach(personThread -> {
                     Thread thread = new Thread(personThread);
@@ -116,12 +126,15 @@ public class SimulationController implements Initializable {
         this.stage = stage;
         this.simulationSettings = simulationSettings;
 
-        UISettings uiSettings = new UISettings(simulationCanvas.getWidth(), simulationCanvas.getHeight(), 10, 20, 30L);
+        // create ui settings and set FPS
+        UISettings uiSettings = new UISettings(simulationCanvas.getWidth(), simulationCanvas.getHeight(), 10, 20, 40L);
         FPS = uiSettings.getFPS();
 
+        // create simulation model and initialize people
         simulationModel = new SimulationModel(simulationSettings, uiSettings);
         simulationModel.initSimulationModel();
 
+        // change range for people wearing mask
         double maskInfectionRange;
         if (simulationSettings.isMask()) {
             maskInfectionRange = simulationSettings.getInfectionRange() * (1 - simulationSettings.getMaskEfficiency());
@@ -129,9 +142,10 @@ public class SimulationController implements Initializable {
             maskInfectionRange = simulationSettings.getInfectionRange();
         }
 
+        // create canvas handler that handles simulation animation
         simulationCanvasHandler = new SimulationCanvasHandler(context, uiSettings, simulationSettings.getInfectionRange(), maskInfectionRange);
 
-        // set up graphs
+        // set up graphs and graph series
         chartHandler = new ChartHandler();
         healthySeries = new XYChart.Series<>();
         lineChart.getData().add(healthySeries);
@@ -141,6 +155,7 @@ public class SimulationController implements Initializable {
         barChart.getData().add(statSeries);
 
 
+        // sets a thread list
         personThreadList.clear();
         simulationModel.getPeople().forEach(person -> {
             personThreadList.add(new PersonThread(person, simulationModel, simulationCanvasHandler));

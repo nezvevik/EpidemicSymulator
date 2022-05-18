@@ -22,7 +22,7 @@
    <bottom>
       <Button fx:id="runSimulationButton" alignment="CENTER" mnemonicParsing="false" onAction="#runButtonPressed" text="Run" BorderPane.alignment="CENTER">
          <BorderPane.margin>
-            <Insets bottom="10.0" />
+            <Insets bottom="10.0" top="10.0" />
          </BorderPane.margin></Button>
    </bottom>
    <center>
@@ -50,11 +50,11 @@
                </GridPane.margin>
             </Label>
             <ScrollBar fx:id="obedientPopulationSlider" value="20.0" visibleAmount="10.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-            <ScrollBar fx:id="disobedientPopulationSlider" visibleAmount="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <ScrollBar fx:id="incubationPeriodSlider" max="10.0" value="3.0" visibleAmount="1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <ScrollBar fx:id="infectionProbabilitySlider" value="10.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <ScrollBar fx:id="infectionRangeSlider" max="50.0" value="25.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ScrollBar fx:id="mortalitySlider" value="50.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ScrollBar fx:id="disobedientPopulationSlider" value="10.0" visibleAmount="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ScrollBar fx:id="incubationPeriodSlider" max="15.0" value="7.0" visibleAmount="1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ScrollBar fx:id="infectionProbabilitySlider" value="30.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <ScrollBar fx:id="infectionRangeSlider" max="60.0" value="30.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ScrollBar fx:id="mortalitySlider" value="20.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <ScrollBar fx:id="movementSpeedSlider" blockIncrement="5.0" max="5.0" min="1.0" value="2.0" visibleAmount="1.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <ScrollBar fx:id="maskEfficiencySlider" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <ScrollBar fx:id="distancingSlider" GridPane.columnIndex="1" GridPane.rowIndex="8" />

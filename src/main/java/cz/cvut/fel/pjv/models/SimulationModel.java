@@ -32,6 +32,9 @@ public class SimulationModel {
         return numOfHealthy;
     }
 
+    /**
+     * Initializes simulation model; set peoples directions and positions, adds a patient number 0
+     */
     public void initSimulationModel() {
         people.clear();
         numOfPeople = simulationSettings.getObedientPopulation() + simulationSettings.getDisobedientPopulation();
@@ -64,6 +67,10 @@ public class SimulationModel {
         numOfHealthy = numOfPeople - 1;
     }
 
+    /**
+     *  Updates infection status for a person and the people around it if the person is infected.
+     * @param person
+     */
     public void updateInfection(Person person) {
         if (person.getInfectionPhase() != InfectionPhase.INFECTED) return;
         Random rand = new Random();
