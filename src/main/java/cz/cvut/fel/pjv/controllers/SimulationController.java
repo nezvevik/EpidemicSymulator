@@ -92,8 +92,14 @@ public class SimulationController implements Initializable {
         simulationModel = new SimulationModel(simulationSettings, uiSettings);
         simulationModel.initSimulationModel();
 
-        simulationCanvasHandler = new SimulationCanvasHandler(context, uiSettings, simulationSettings.getInfectionRange());
+        double maskInfectionRange;
+        if (simulationSettings.isMask()) {
+            maskInfectionRange = simulationSettings.getInfectionRange() * (1 - simulationSettings.getMaskEfficiency());
+        } else {
+            maskInfectionRange = simulationSettings.getInfectionRange();
+        }
 
+        simulationCanvasHandler = new SimulationCanvasHandler(context, uiSettings, simulationSettings.getInfectionRange(), maskInfectionRange);
 
         series = new XYChart.Series<>();
         lineChart.getData().add(series);

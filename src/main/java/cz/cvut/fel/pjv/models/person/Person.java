@@ -5,6 +5,7 @@ import javafx.geometry.Point2D;
 public class Person {
     private Point2D position;
     private Point2D direction;
+    private Point2D originPoint;
 
     private InfectionPhase infectionPhase;
 
@@ -28,7 +29,11 @@ public class Person {
     public void setPosition(Point2D position) {
         this.position = position;
     }
-    
+
+    public void setOriginPoint(Point2D originPoint) {
+        this.originPoint = originPoint;
+    }
+
     public Point2D getPosition() {
         return position;
     }
@@ -41,9 +46,11 @@ public class Person {
         return infectionPhase;
     }
 
-
     public boolean isObedient() {
         return isObedient;
     }
 
+    public Point2D getOriginPoint() {
+        return originPoint;
+    }
 }

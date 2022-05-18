@@ -32,10 +32,7 @@ public class SimulationModel {
     }
 
     public void initSimulationModel() {
-        System.out.println("neco delam");
-        System.out.println(people);
         people.clear();
-        System.out.println(people);
         int totalPeople = simulationSettings.getObedientPopulation() + simulationSettings.getDisobedientPopulation();
         if (totalPeople <= 0) {
             return;
@@ -72,7 +69,7 @@ public class SimulationModel {
         Random rand = new Random();
         people.forEach(person2 -> {
             if (person2.getInfectionPhase() != InfectionPhase.HEALTHY) return;
-            if (!isInRange(person, person2, getSimulationSettings().getInfectionRange())) return;
+            if (!isInRange(person, person2, getSimulationSettings().getInfectionRange(), person.isObedient())) return;
             if (!isTransmitted(rand)) return;
             numOfHealthy--;
             numOfInfected++;
@@ -127,7 +124,10 @@ public class SimulationModel {
         person.setPosition(new Point2D(x + vx, y + vy));
     }
 
-    private boolean isInRange(Person person1, Person person2, double range) {
+    private boolean isInRange(Person person1, Person person2, double range, boolean isObedient) {
+        if (isObedient && simulationSettings.isMask()) {
+            range = range * (1 - simulationSettings.getMaskEfficiency());
+        }
         boolean ret = false;
         double distance = getDistance(person1, person2);
         if (distance < Math.pow(range, 2)) {

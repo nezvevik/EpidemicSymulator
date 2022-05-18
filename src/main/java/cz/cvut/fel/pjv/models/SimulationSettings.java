@@ -50,7 +50,7 @@ public class SimulationSettings {
         this.mortality = (float) (mortality / 100.0);
 
         this.isMask = isMask;
-        this.maskEfficiency = (float) maskEfficiency;
+        this.maskEfficiency = (float) (maskEfficiency / 100.0);
         this.isDistancing = isDistancing;
         this.socialDistancingRange = (int) socialDistancingRange;
     }

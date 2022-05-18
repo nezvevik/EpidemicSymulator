@@ -39,7 +39,6 @@ public class SettingsController implements Initializable {
         gridPane.getChildren().forEach(node -> {
             if (node instanceof ScrollBar) {
                 scrollBars.add((ScrollBar) node);
-                System.out.println(gridPane.getRowIndex(node));
                 labels.get(gridPane.getRowIndex(node)).setText(String.valueOf((int) ((ScrollBar) node).getValue()));
                 ((ScrollBar) node).valueProperty().addListener((observableValue, number, t1) -> {
                     labels.get(gridPane.getRowIndex(node)).setText(String.valueOf((int) ((ScrollBar) node).getValue()));

@@ -12,12 +12,14 @@ public class SimulationCanvasHandler {
     private GraphicsContext context;
     private final UISettings uiSettings;
     private double infectionRange;
+    private double maskInfectionRange;
 
 
-    public SimulationCanvasHandler(GraphicsContext context, UISettings uiSettings, double infectionRange) {
+    public SimulationCanvasHandler(GraphicsContext context, UISettings uiSettings, double infectionRange, double maskInfectionRange) {
         this.context = context;
         this.uiSettings = uiSettings;
         this.infectionRange = infectionRange;
+        this.maskInfectionRange = maskInfectionRange;
     }
     public void draw(List<Person> people) {
         clearCanvas();
@@ -28,7 +30,11 @@ public class SimulationCanvasHandler {
     public void drawPerson(Person person) {
         if (person.getInfectionPhase() == InfectionPhase.INFECTED) {
             context.setFill(Color.PALEVIOLETRED);
-            context.fillOval(person.getPosition().getX() - infectionRange, person.getPosition().getY() - infectionRange, infectionRange * 2, infectionRange * 2);
+            if (person.isObedient()) {
+                context.fillOval(person.getPosition().getX() - maskInfectionRange, person.getPosition().getY() - maskInfectionRange, maskInfectionRange * 2, maskInfectionRange * 2);
+            } else {
+                context.fillOval(person.getPosition().getX() - infectionRange, person.getPosition().getY() - infectionRange, infectionRange * 2, infectionRange * 2);
+            }
         }
 
         context.setFill(person.getInfectionPhase().getColor());
