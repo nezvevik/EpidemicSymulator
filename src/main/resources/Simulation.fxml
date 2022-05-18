@@ -71,7 +71,7 @@
                <children>
                   <LineChart fx:id="lineChart" minWidth="0.0">
                     <xAxis>
-                      <CategoryAxis side="BOTTOM" />
+                      <NumberAxis side="BOTTOM" />
                     </xAxis>
                     <yAxis>
                       <NumberAxis side="LEFT" />

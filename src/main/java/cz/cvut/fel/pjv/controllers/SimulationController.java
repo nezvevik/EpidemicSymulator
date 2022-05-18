@@ -1,5 +1,6 @@
 package cz.cvut.fel.pjv.controllers;
 
+import cz.cvut.fel.pjv.handlers.ChartHandler;
 import cz.cvut.fel.pjv.models.SimulationModel;
 import cz.cvut.fel.pjv.handlers.SimulationCanvasHandler;
 import cz.cvut.fel.pjv.models.PersonThread;
@@ -34,6 +35,9 @@ public class SimulationController implements Initializable {
     
     public LineChart lineChart;
     public BarChart barChart;
+
+    private ChartHandler chartHandler;
+    private XYChart.Series series;
     
     public Button resetButton;
     public Button startButton;
@@ -51,12 +55,18 @@ public class SimulationController implements Initializable {
     private class Movement extends AnimationTimer {
         private final long frames_per_second = 50L;
         private final long interval = 1_000_000_000L/frames_per_second;
+        private long offset = 30;
 
         private long lastRecord = 0;
+        private long counter = 0;
 
         @Override
         public void handle(long now) {
             if (now - lastRecord > interval) {
+                if (counter % offset == 0) {
+                    series.getData().add(new XYChart.Data<>(counter, simulationModel.getNumOfHealthy()));
+                }
+                counter++;
                 simulationCanvasHandler.clearCanvas();
                 personThreadList.forEach(personThread -> {
                     Thread thread = new Thread(personThread);
@@ -76,7 +86,7 @@ public class SimulationController implements Initializable {
         context = simulationCanvas.getGraphicsContext2D();
     }
 
-    public void runSimulation(Stage stage, SimulationSettings simulationSettings) {
+    public void runSimulation(Stage stage, SimulationSettings simulationSettings) throws IOException {
         UISettings uiSettings = new UISettings(simulationCanvas.getWidth(), simulationCanvas.getHeight(), 10, 20);
 
         simulationModel = new SimulationModel(simulationSettings, uiSettings);
@@ -85,12 +95,22 @@ public class SimulationController implements Initializable {
         simulationCanvasHandler = new SimulationCanvasHandler(context, uiSettings, simulationSettings.getInfectionRange());
 
 
+        series = new XYChart.Series<>();
+        lineChart.getData().add(series);
+
+
+
         simulationModel.getPeople().forEach(person -> {
             personThreadList.add(new PersonThread(person, simulationModel, simulationCanvasHandler));
         });
 
 
         movement = new Movement();
+
+
+        chartHandler = new ChartHandler();
+//        chartHandler.setBarSeries(barChart);
+//        chartHandler.setLineSeries(lineChart);
     }
 
     public void resetButtonPressed () {
